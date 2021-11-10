@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	ThreadedEchoServer()
+	UDPDaytimeClient()
 }
 
 /*	IP
@@ -202,38 +202,71 @@ func ListenTCP() {
 
 /*	ThreadedEchoServer
  */
-func ThreadedEchoServer() {
-	service := ":1201"
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
-	checkError(err)
+// func ThreadedEchoServer() {
+// 	service := ":1201"
+// 	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
+// 	checkError(err)
 
-	listener, err := net.ListenTCP("tcp", tcpAddr)
-	checkError(err)
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			continue
-		}
-		go handleClient(conn)
+// 	listener, err := net.ListenTCP("tcp", tcpAddr)
+// 	checkError(err)
+// 	for {
+// 		conn, err := listener.Accept()
+// 		if err != nil {
+// 			continue
+// 		}
+// 		go handleClient(conn)
+// 	}
+// }
+
+// func handleClient(conn net.Conn) {
+// 	defer conn.Close()
+
+// 	var buf [512]byte
+// 	for {
+// 		n, err := conn.Read(buf[0:])
+// 		if err != nil {
+// 			return
+// 		}
+
+// 		_, err2 := conn.Write(buf[0:n])
+// 		if err2 != nil {
+// 			return
+// 		}
+// 	}
+// }
+/*	END ThreadedEchoServer
+ */
+
+/* ---------------------------------------------------------------
+	*	3.8 UDP Datagrams:
+--------------------------------------------------------------- */
+/*	UDPDaytimeClient
+ */
+func UDPDaytimeClient() {
+	if len(os.Args) != 2 {
+		fmt.Fprintf(os.Stderr, "Usage: %s host:port", os.Args[0])
+		os.Exit(1)
 	}
-}
+	service := os.Args[1]
+	udpAddr, err := net.ResolveUDPAddr("udp4", service)
+	checkError(err)
 
-func handleClient(conn net.Conn) {
-	defer conn.Close()
+	conn, err := net.DialUDP("udp", nil, udpAddr)
+	checkError(err)
+
+	_, err = conn.Write([]byte("anything"))
+	checkError(err)
 
 	var buf [512]byte
-	for {
-		n, err := conn.Read(buf[0:])
-		if err != nil {
-			return
-		}
+	n, err := conn.Read(buf[0:])
+	checkError(err)
 
-		_, err2 := conn.Write(buf[0:n])
-		if err2 != nil {
-			return
-		}
-	}
+	fmt.Println(string(buf[0:n]))
+	os.Exit(0)
 }
+
+/*
+	END UDPDaytimeClient */
 
 func checkError(err error) {
 	if err != nil {
