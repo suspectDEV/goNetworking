@@ -125,12 +125,12 @@ func loadJSON(fileName string, key interface{}) {
 /* END LoadJSON
  */
 
-func checkError(err error) {
-	if err != nil {
-		fmt.Fprint(os.Stderr, "Fatal error: %s", err.Error())
-		os.Exit(1)
-	}
-}
+// func checkError(err error) {
+// 	if err != nil {
+// 		fmt.Fprint(os.Stderr, "Fatal error: %s", err.Error())
+// 		os.Exit(1)
+// 	}
+// }
 
 func readFully(conn net.Conn) ([]byte, error) {
 	defer conn.Close()
