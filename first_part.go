@@ -13,9 +13,9 @@ import (
 	"time"
 )
 
-func main() {
-	Ping()
-}
+// func main() {
+// 	Ping()
+// }
 
 /*	IP
  */
