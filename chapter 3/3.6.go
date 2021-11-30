@@ -45,8 +45,6 @@ func GetHeadInfo() {
 ----
 Crea un servicio en el puerto 1200: Responde la hora a los clientes
 que se conecten
-TODO: Podría probrar este servicio en DO
-Para probarlo se usa telnet desde el cliente.
 */
 func DaytimeServer() {
 	service := ":1200"
