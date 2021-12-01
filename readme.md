@@ -18,4 +18,4 @@ Los capítulos están organizados por carpetas con sus respectivos puntos desarr
 ### Capítulo 4: Data serialisation
 - [x] 4.4: ASN.1
 - [x] 4.5: JSON
-- [ ] 4.6: The gob package
+- [x] 4.6: The gob package
