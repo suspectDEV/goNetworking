@@ -15,4 +15,5 @@ Los capítulos están organizados por carpetas con sus respectivos puntos desarr
 - [x] 3.11: Raw sockets and the type IPConn (Ping)
 
 ### Capítulo 4: Data serialisation
-- [ ] 4.4: ASN.1
+- [x] 4.4: ASN.1
+- [ ] 4.5: JSON
