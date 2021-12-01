@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"net"
 	"os"
 )
 
@@ -31,12 +32,17 @@ func main() {
 	// SaveJSON("person.json", person)
 	// ..
 	// Descomentar para usar función LoadJSON
-	var person Person
-	LoadJSON("person.json", &person)
-	fmt.Println("Person ", person.String())
+	// var person Person
+	// LoadJSON("person.json", &person)
+	// fmt.Println("Person ", person.String())
+	if os.Args[1] == "server" {
+		JSONEchoServer()
+	} else {
+		JSONEchoClient()
+	}
 }
 
-/*	SaveJSON
+/*	SAVE JSON
 	----
 	Crea un archivo con extensión JSON
 	y almacena los datos allí.
@@ -50,7 +56,7 @@ func SaveJSON(fileName string, key interface{}) {
 	outFile.Close()
 }
 
-/* LoadJSON
+/* LOAD JSON
 ----
 Carga un archivo JSON previamente
 creado
@@ -74,6 +80,70 @@ func (p Person) String() string {
 		s += "\n" + v.Kind + ": " + v.Address
 	}
 	return s
+}
+
+/*	JSON ECHO CLIENT
+	----
+	Cliente conectado al servicio del puerto 1200 que envía los datos
+	de un archivo JSON con 10 lecturas de ciclo for
+*/
+func JSONEchoClient() {
+	person := Person{
+		Name: Name{Family: "Newmarch", Personal: "Jan"},
+		Email: []Email{{Kind: "home", Address: "jan@newmarch.name"},
+			{Kind: "work", Address: "j.newmarch@boxhill.edu.au"}}}
+
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: ", os.Args[0], "host:port")
+		os.Exit(1)
+	}
+	service := os.Args[2]
+
+	conn, err := net.Dial("tcp", service)
+	checkError(err)
+
+	encoder := json.NewEncoder(conn)
+	decoder := json.NewDecoder(conn)
+
+	for n := 0; n < 10; n++ {
+		encoder.Encode(person)
+		var newPerson Person
+		decoder.Decode(&newPerson)
+		fmt.Println(newPerson.String())
+	}
+	os.Exit(0)
+}
+
+/*	JSON ECHO SERVER
+	----
+	Crea un servicio en el puerto 1200 capaz de leer y escribir
+	un archivo JSON 10 veces enviado por el cliente.
+*/
+func JSONEchoServer() {
+	service := "0.0.0.0:1200"
+	tcpAddr, err := net.ResolveTCPAddr("tcp", service)
+	checkError(err)
+
+	listener, err := net.ListenTCP("tcp", tcpAddr)
+	checkError(err)
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			continue
+		}
+
+		encoder := json.NewEncoder(conn)
+		decoder := json.NewDecoder(conn)
+
+		for n := 0; n < 10; n++ {
+			var person Person
+			decoder.Decode(&person)
+			fmt.Println(person.String())
+			encoder.Encode(person)
+		}
+		conn.Close()
+	}
 }
 
 func checkError(err error) {
