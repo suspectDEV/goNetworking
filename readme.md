@@ -14,6 +14,8 @@ Los capítulos están organizados por carpetas con sus respectivos puntos desarr
 - [x] 3.10: The types Conn, PacketConn and Listener (Reescribiendo algunas funciones del punto 3.6)
 - [x] 3.11: Raw sockets and the type IPConn (Ping)
 
+
 ### Capítulo 4: Data serialisation
 - [x] 4.4: ASN.1
-- [ ] 4.5: JSON
+- [x] 4.5: JSON
+- [ ] 4.6: The gob package
