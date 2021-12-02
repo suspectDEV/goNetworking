@@ -19,3 +19,4 @@ Los capítulos están organizados por carpetas con sus respectivos puntos desarr
 - [x] 4.4: ASN.1
 - [x] 4.5: JSON
 - [x] 4.6: The gob package
+- [ ] 4.7: Encoding binary data as strings
