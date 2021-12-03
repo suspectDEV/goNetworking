@@ -14,11 +14,10 @@ func main() {
 	encoder.Close()
 	fmt.Println(bb)
 
-	dbuf := make([]byte, 100)
+	dbuf := make([]byte, 12)
 	decoder := base64.NewDecoder(base64.StdEncoding, bb)
 	decoder.Read(dbuf)
-
 	for _, ch := range dbuf {
-		fmt.Print(ch)
+		fmt.Println(ch)
 	}
 }
